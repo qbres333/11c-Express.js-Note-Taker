@@ -3,7 +3,7 @@ const express = require("express");
 // Import custom middleware
 const { logger } = require("../middleware/logger");
 
-// Import modular routers for /notes
+// Import modular router for /notes
 const notesRouter = require("./notes");
 
 const app = express();
