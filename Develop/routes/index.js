@@ -1,4 +1,4 @@
-const express = require("express");
+const router = require("express").Router();
 
 // Import custom middleware
 const { logger } = require("../middleware/logger");
@@ -6,11 +6,9 @@ const { logger } = require("../middleware/logger");
 // Import modular router for /notes
 const notesRouter = require("./notes");
 
-const app = express();
-
-app.use("/notes", notesRouter);
+router.use("/notes", notesRouter);
 
 // Initialize custom middleware
-app.use(logger);
+router.use(logger);
 
-module.exports = app;
+module.exports = router;
