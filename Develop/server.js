@@ -27,16 +27,18 @@ app.get("/notes", (req, res) =>
   res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
+// POST request is in the notes.js route file
+
 // GET request for a specific note to be rendered
 app.get("/notes/:id", (req, res) => {
+    // log the request to view a note
+    console.info(`${req.method} request received to view a note`);
     const { id } = req.params;
+
     // get single note to display on the right
-    
     if(!id) {
         return res.status(400).send('Review ID not found!');
     }
-
-    console.info(`${req.method} request received to view a note`);
 
     const singleNote = notes.find((note) => note.id === id);
 
@@ -44,32 +46,33 @@ app.get("/notes/:id", (req, res) => {
         return res.status(404).json("Note not found!");
     }
 
-    res.status(200).json(singleNote);
-    
+    res.status(200).json(singleNote);    
 });
 
 // DELETE route for specific note
 app.delete("/notes/:id", (req, res) => {
-    const { id } = req.params;
-    console.info(`${req.method}  request received to delete a note`);
-    const singleNote = notes.findIndex((note) => note.id === id);
+    // log the delete request
+  console.info(`${req.method} request received to delete a note`);
 
-    // read the notes in the JSON file
-    fs.readFile('./db/db.json', 'utf8', (err, data) => {
-        if (err) {
-            return res.status(400).send('Note ID not found!');
-        } else {
+  const { id } = req.params;
+  // find the index of the note to be deleted based on the ID
+  const noteIndex = notes.findIndex((note) => note.id === id);
 
+  if (!noteIndex) {
+    return res.status(400).send("Note not found!");
+  } else {
+    //if found, delete the single note
+    notes.splice(noteIndex, 1);
+  }
 
-            if (!singleNote) {
-            return res.status(400).json("Note not found!");
-            }
+  fs.writeFile(notes, JSON.stringify(notes), (err) => {
+    if (err) {
+      console.error("Error updating notes file:", err);
+      return res.status(400).json("Error updating notes file");
+    }
+  });
 
-            res.status(200).json(singleNote);
-        }
-     
-
-    })
+  res.status(200).json("Note deleted successfully");
 });
 
 app.listen(PORT, () =>

@@ -11,6 +11,10 @@ const logger = (req, res, next) => {
         console.info(`📘 ${fgMagenta}${req.method} request to ${req.path}`);
         break;
       }
+      case "DELETE": {
+        console.info(`📕 ${fgMagenta}${req.method} request to ${req.path}`);
+        break;
+      }
       default:
         console.log(`📙${fgMagenta}${req.method} request to ${req.path}`);
     }
