@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const { logger } = require("../middleware/logger");
+const { logger } = require("./middleware/logger");
 const api = require("./routes/index.js");
 
 const PORT = 3001;
@@ -15,12 +15,12 @@ app.use(express.static("public"));
 
 // GET route for homepage
 app.get("/", (req, res) =>
-  res.sendFile(path.join(_dirname, "/public/index.html"))
+  res.sendFile(path.join(__dirname, "/public/index.html"))
 );
 
 // GET route for notes page
-app.get("/", (req, res) =>
-  res.sendFile(path.join(_dirname, "/public/notes.html"))
+app.get("/notes", (req, res) =>
+  res.sendFile(path.join(__dirname, "/public/notes.html"))
 );
 
 app.listen(PORT, () =>
