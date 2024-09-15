@@ -25,9 +25,7 @@ app.get("/", (req, res) =>
 
 // GET route for notes page
 app.get("/notes", (req, res) => 
-    res.sendFile(path.join(__dirname, "/public/notes.html"))
-
-    
+    res.sendFile(path.join(__dirname, "/public/notes.html"))    
 );
 
 // -------------------POST request is in the notes.js route file ------------------
@@ -35,24 +33,24 @@ app.get("/notes", (req, res) =>
 
 // GET request for a specific note to be rendered
 app.get("/notes/:id", (req, res) => {
-  
-    const { id } = req.params;
+      const { id } = req.params;
 
     // get single note to display on the right
     if(!id) {
         return res.status(400).send('Review ID not found!');
     }
-
+    // find the note ID in the database
     const singleNote = notes.find((note) => note.id === id);
 
     if(!singleNote) {
         return res.status(404).json("Note not found!");
     }
-
+    // render note if found
     res.status(200).json(singleNote);    
 });
 
 // GET request to get all notes
+// needed for deletion
 app.get('/api/notes', (req, res) => res.json(notes));
 
 // DELETE route for specific note
