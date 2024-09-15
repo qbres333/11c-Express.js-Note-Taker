@@ -16,7 +16,7 @@ const logger = (req, res, next) => {
         break;
       }
       default:
-        console.log(`📙${fgMagenta}${req.method} request to ${req.path}`);
+        console.log(`🟪${fgMagenta}${req.method} request to ${req.path}`);
     }
 
     next();

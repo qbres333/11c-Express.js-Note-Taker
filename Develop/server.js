@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const { logger } = require("./middleware/logger");
+const { deleteFromFile } = require("./helpers/fsUtils");
 const api = require("./routes/index.js");
 const notes = require("./db/db");
 const fs = require("fs");
@@ -23,16 +24,18 @@ app.get("/", (req, res) =>
 );
 
 // GET route for notes page
-app.get("/notes", (req, res) =>
-  res.sendFile(path.join(__dirname, "/public/notes.html"))
+app.get("/notes", (req, res) => 
+    res.sendFile(path.join(__dirname, "/public/notes.html"))
+
+    
 );
 
-// POST request is in the notes.js route file
+// -------------------POST request is in the notes.js route file ------------------
+
 
 // GET request for a specific note to be rendered
 app.get("/notes/:id", (req, res) => {
-    // log the request to view a note
-    console.info(`${req.method} request received to view a note`);
+  
     const { id } = req.params;
 
     // get single note to display on the right
@@ -49,30 +52,24 @@ app.get("/notes/:id", (req, res) => {
     res.status(200).json(singleNote);    
 });
 
+// GET request to get all notes
+app.get('/api/notes', (req, res) => res.json(notes));
+
 // DELETE route for specific note
-app.delete("/notes/:id", (req, res) => {
-    // log the delete request
-  console.info(`${req.method} request received to delete a note`);
+app.delete("/api/notes/:id", (req, res) => {
 
-  const { id } = req.params;
-  // find the index of the note to be deleted based on the ID
-  const noteIndex = notes.findIndex((note) => note.id === id);
-
-  if (!noteIndex) {
-    return res.status(400).send("Note not found!");
-  } else {
-    //if found, delete the single note
-    notes.splice(noteIndex, 1);
-  }
-
-  fs.writeFile(notes, JSON.stringify(notes), (err) => {
-    if (err) {
-      console.error("Error updating notes file:", err);
-      return res.status(400).json("Error updating notes file");
+    const noteID = req.params.id;
+    // iterate through the notes to find the matching note ID
+    for(let i = 0; i < notes.length; i++) {
+        if(noteID === notes[i].id) {
+            deleteFromFile(noteID, "./db/db.json");
+            return res.status(200).json("Note deleted successfully");
+                   
+        } 
     }
-  });
-
-  res.status(200).json("Note deleted successfully");
+    // return message if there's no such note
+    return res.status(400).send(`Error in deleting note`); 
+    
 });
 
 app.listen(PORT, () =>

@@ -13,8 +13,6 @@ notes.get('/', (req, res) => {
 
 // POST route for a new note
 notes.post('/', (req, res) => {
-     // Log that a POST request was received
-    console.info(`${req.method} request received to add a note`);
 
     const { title, text } = req.body;
 
@@ -25,7 +23,7 @@ notes.post('/', (req, res) => {
             id: uuid(),
         };
         readAndAppend(newNote, './db/db.json');
-        res.json(`Note added successfully`);
+       
     } else {
         res.status(400).send(`Error in adding note`);
     }
