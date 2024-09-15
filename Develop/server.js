@@ -62,9 +62,8 @@ app.delete("/api/notes/:id", (req, res) => {
     // iterate through the notes to find the matching note ID
     for(let i = 0; i < notes.length; i++) {
         if(noteID === notes[i].id) {
-            deleteFromFile(noteID, "./db/db.json");
+            deleteFromFile(noteID, "./db/db.json");            
             return res.status(200).json("Note deleted successfully");
-                   
         } 
     }
     // return message if there's no such note
