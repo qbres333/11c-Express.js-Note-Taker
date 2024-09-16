@@ -22,6 +22,8 @@ The app's clean, intuitive interface is user-friendly and accessible to users of
 
 To begin using the Note Taker app on your computer, install Node.js. Clone the app's repository from GitHub and install the necessary dependencies using npm (terminal command "npm i") if you don't see the node modules in the cloned repo. Once installed, run the application in the terminal using the command "npm start". Follow the link shown in the terminal by pressing "CTRL" or command ⌘ key and simultaneous clicking the link. To create a new note, enter the note title and text. To save the note, click the "Sav Note" button. To delete a note, click the trash icon on the note. You can view an existing note's details by clicking on it.
 
+![app preview](Assets/notes_view.png)
+
 ## Credits
 
 UC Berkeley starter code:
