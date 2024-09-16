@@ -36,7 +36,7 @@ const readAndAppend = (newNote, file) => {
           parsedData = data.trim() === "" ? [] : JSON.parse(data);
         } catch (parseErr) {
           reject(parseErr);
-          return; //exit function
+          
         }
 
         // add new note to the array
