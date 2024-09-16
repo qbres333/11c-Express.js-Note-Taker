@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { start } = require("repl");
 const util = require("util");
 
 // promise version of the fs.readFile Node function
@@ -31,21 +30,21 @@ const readAndAppend = (newNote, file) => {
       if (err) {
         reject(err); //reject if there's a read error
       } else {
+        let parsedData;
         try {
-          //if there's no error, parse the data and append new note
-          const parsedData = JSON.parse(data);
-          parsedData.push(newNote);
-          // handle writeToFile asynchonously
-          writeToFile(file, parsedData)
-            .then(() => {
-              resolve(`Success!`); //resolve if write is successful
-            })
-            .catch((writeErr) => {
-              reject(writeErr); //reject if writing fails
-            });
+          //if there's no error, parse the data (if it exists) and append new note. Otherwise initialize an new array
+          parsedData = data.trim() === "" ? [] : JSON.parse(data);
         } catch (parseErr) {
           reject(parseErr);
+          return; //exit function
         }
+
+        // add new note to the array
+        parsedData.push(newNote);
+        // handle writeToFile asynchonously (write updated data back to the file)
+        writeToFile(file, parsedData)
+          .then(() => resolve(`Success!`)) //resolve if write is successful
+          .catch((writeErr) => reject(writeErr)); //reject if writing fails
       }
     });
   });
@@ -53,25 +52,38 @@ const readAndAppend = (newNote, file) => {
 
 // add method to delete a note
 const deleteFromFile = (noteID, file) => {
-  fs.readFile(file, "utf8", (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-      //if there's no error find the index of the note and delete it
-      const parsedData = JSON.parse(data);
-      const noteIndex = parsedData.findIndex((note) => note.id === noteID);
+    return new Promise((resolve, reject) => {
+        fs.readFile(file, "utf8", (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            //if there's no error find the index of the note and delete it
+            let parsedData;
+            try {
+                parsedData = JSON.parse(data);
+            } catch (parseErr) {
+                reject(parseErr);
+                return;
+            }
+            
+            // find the note index
+            const noteIndex = parsedData.findIndex(
+              (note) => note.id === noteID
+            );
 
-      if (!noteIndex) {
-        console.log(`Note not found!`);
-      } else {
-        // if found, delete note from array of note objects
-        parsedData.splice(noteIndex, 1);
-        // update file data sans deleted note
-        writeToFile(file, parsedData);
-        console.log(`Note with ID ${noteID} deleted successfully`);
-      }
-    }
-  });
+            if (noteIndex === -1) {
+              reject(`Note not found!`);
+            } else {
+              // if found, delete note from array of note objects
+              parsedData.splice(noteIndex, 1);
+              // update file data sans deleted note
+              writeToFile(file, parsedData)
+              .then(() => resolve(`Note with ID ${noteID} deleted successfully`))
+              .catch((writeErr) => reject(writeErr));
+            }
+          }
+        });
+    });
 };
 
 module.exports = { readFromFile, writeToFile, readAndAppend, deleteFromFile };
