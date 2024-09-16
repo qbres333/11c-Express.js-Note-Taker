@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const { logger } = require("./middleware/logger");
-const { readFromFile, deleteFromFile } = require("./helpers/fsUtils");
+const { deleteFromFile } = require("./helpers/fsUtils");
 const api = require("./routes/index.js");
 const notes = require("./db/db");
 const fs = require("fs");
@@ -28,7 +28,7 @@ app.get("/notes", (req, res) =>
     res.sendFile(path.join(__dirname, "/public/notes.html"))    
 );
 
-// -------------------POST & DELETE requests are in the notes.js route file ------------------
+// -------------------POST request is in the notes.js route file ------------------
 
 
 // GET request for a specific note to be rendered
@@ -48,10 +48,6 @@ app.get("/notes/:id", (req, res) => {
     // render note if found
     res.status(200).json(singleNote);    
 });
-
-// GET request to get all notes
-// needed for deletion
-// app.get("/notes", (req, res) => res.json(notes));
 
 // DELETE request to delete a specific note
 app.delete("/api/notes/:id", (req, res) => {

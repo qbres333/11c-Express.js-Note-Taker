@@ -9,7 +9,7 @@ Designed with productivity in mind, my Note Taker app, built using Express.js, i
 This app was developed to be deployed from the command line interface. It requires the installation of Node.js and its packages to run the app in the CLI.
 
 The app was deployed with Render at the following link:
-https://one1c-express-js-note-taker.onrender.com
+https://one1c-express-js-note-taker-1.onrender.com
 
 The online repository with all code files can be accessed here:
 https://github.com/qbres333/11c-Express.js-Note-Taker
