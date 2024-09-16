@@ -10,7 +10,7 @@ notes.use(logger);
 // GET route for retrieving all notes
 notes.get("/", (req, res) => {
   readFromFile("./db/db.json")
-    .then((data) => res.json(JSON.parse(data))) //data is parsed is read is successful
+    .then((data) => res.json(JSON.parse(data))) //data is parsed if read is successful
     .catch((err) => res.status(400).json({ error: err }));
 });
 

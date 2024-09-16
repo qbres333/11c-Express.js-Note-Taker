@@ -4,11 +4,7 @@ const logger = (req, res, next) => {
     const fgMagenta = "\x1b[35m";
     switch (req.method) {
       case "GET": {
-        if (req.path === "/") {
-          console.info(`⬜ Navigating to webpage`);
-        } else {
-          console.info(`📗 ${fgMagenta}${req.method} request to ${req.path}`);
-        }
+        console.info(`📗 ${fgMagenta}${req.method} request to ${req.path}`);
         break;
       }
       case "POST": {
